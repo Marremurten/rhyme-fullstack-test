@@ -1,99 +1,103 @@
-import React, { useState } from 'react';
-import { Container, Row, Col, Form, Button } from 'react-bootstrap';
-import { useHistory, useParams } from 'react-router-dom';
-import axios from 'axios';
-import './ArticlesNew.css';
+import React, { useState, useEffect } from "react";
+import { Container, Row, Col, Form, Button } from "react-bootstrap";
+import { useHistory, useParams } from "react-router-dom";
+import axios from "axios";
+import "./ArticlesNew.css";
 
-axios.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
-axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
+axios.defaults.headers.post["Content-Type"] = "application/json;charset=utf-8";
+axios.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
 
-const initialState = {
-  title: '',
-  description: '',
-  author: '',
-  body: '',
-};
 const ArticleEdit = () => {
-  const [article, setArticle] = useState(initialState);
+  const [article, setArticle] = useState({});
 
   const { id } = useParams();
   let history = useHistory();
 
-  const handleChange = (e) => {
+  useEffect(() => {
+    axios
+      .get(`http://localhost:5000/${id}`)
+      .then(res => {
+        setArticle(res.data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }, article);
+
+  const handleChange = e => {
     const newArticle = { ...article };
     newArticle[e.target.id] = e.target.value;
     setArticle(newArticle);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = e => {
     e.preventDefault();
 
-    axios
-      .put(
-        `http://ec2-3-249-202-253.eu-west-1.compute.amazonaws.com/articles/${id}`,
-        article
-      )
-      .then(
-        (res) => {
-          console.log(res);
-        },
-        (err) => {
-          console.log(err);
-        }
-      );
-    history.push('/');
+    axios.put(`http://localhost:5000/${id}`, article).then(
+      res => {
+        console.log(res);
+      },
+      err => {
+        console.log(err);
+      }
+    );
+    history.push("/");
   };
 
   return (
     <Container>
-      <Row className="new-article-wrapper">
-        <Col lg={6} className="new-article-border">
+      <Row className='new-article-wrapper'>
+        <Col lg={6} className='new-article-border'>
           <h1>Edit Article</h1>
           <Form
-            onSubmit={(e) => {
+            onSubmit={e => {
               handleSubmit(e);
             }}
           >
             <Form.Group>
               <Form.Label>Title</Form.Label>
               <Form.Control
-                onChange={(e) => handleChange(e)}
-                id="title"
+                value={article.title}
+                onChange={e => handleChange(e)}
+                id='title'
               ></Form.Control>
             </Form.Group>
             <Form.Group>
               <Form.Label>Description</Form.Label>
               <Form.Control
-                onChange={(e) => handleChange(e)}
-                id="description"
+                value={article.description}
+                onChange={e => handleChange(e)}
+                id='description'
               ></Form.Control>
             </Form.Group>
             <Form.Group>
               <Form.Label>Author</Form.Label>
               <Form.Control
-                onChange={(e) => handleChange(e)}
-                id="author"
+                value={article.author}
+                onChange={e => handleChange(e)}
+                id='author'
               ></Form.Control>
             </Form.Group>
             <Form.Group>
               <Form.Label>Body</Form.Label>
               <Form.Control
-                as="textarea"
-                onChange={(e) => handleChange(e)}
-                id="body"
+                as='textarea'
+                value={article.body}
+                onChange={e => handleChange(e)}
+                id='body'
               ></Form.Control>
             </Form.Group>
             <div>
-              <Button type="submit">Change </Button>
+              <Button type='submit'>Change </Button>
               <Button
-                type="submit"
+                type='submit'
                 onClick={() => {
-                  history.push('/');
+                  history.push("/");
                 }}
-                variant="danger"
-                style={{ marginLeft: '10px' }}
+                variant='danger'
+                style={{ marginLeft: "10px" }}
               >
-                Cancel{' '}
+                Cancel{" "}
               </Button>
             </div>
           </Form>

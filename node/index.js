@@ -18,7 +18,7 @@ app.use(articlesRoute);
 mongoose.connect(
   process.env.DB_CONNECTION,
   { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true },
-  () => console.log("connteced to DB")
+  () => console.log("connected to DB")
 );
 
 app.listen(5000);

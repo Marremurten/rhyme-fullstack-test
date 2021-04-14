@@ -1,0 +1,32 @@
+.articles-header {
+  text-align: center;
+}
+
+.articles-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.article-card {
+  padding: 10px;
+  width: 35%;
+  margin: 15px;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+.article-card-header {
+  text-align: left;
+}
+.article-card-header h3 {
+  text-align: center;
+}
+
+.article-card-content {
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+}

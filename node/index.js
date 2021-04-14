@@ -1,12 +1,35 @@
 const express = require("express");
-const moongoose = require("moongoose");
+const mongoose = require("mongoose");
 require("dotenv/config");
+const Article = require("./models/Article");
 
 const app = express();
 
-const articlesRoute = require("./routes/articles");
+// const articlesRoute = require("./routes/articles");
 
-app.use("/articles", articlesRoute);
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+// app.use(articlesRoute);
+
+app.get("/", (req, res) => {
+  res.send;
+});
+
+app.post("/", async (req, res) => {
+  const post = new Article({
+    title: req.body.title,
+    description: req.body.description,
+    author: req.body.author,
+    body: req.body.body,
+  });
+
+  try {
+    const savedPost = await post.save();
+    res.json(savedPost);
+  } catch (err) {
+    res.json({ message: err });
+  }
+});
 
 //connect to DB
 mongoose.connect(

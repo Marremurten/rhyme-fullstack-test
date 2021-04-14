@@ -1,55 +1,18 @@
 const express = require("express");
 const router = express.Router();
-const Article = require("../models/Article");
+const {
+  articles_get_all,
+  articles_get_by_id,
+  articles_create,
+  articles_delete,
+  articles_update,
+} = require("../controllers/articles");
 
-// get all articles
-router.get("/", async (req, res) => {
-  try {
-    const articles = await Article.find();
-    res.json(articles);
-  } catch (err) {
-    res.json({ message: err });
-  }
-});
+//Routes
+router.get("/", articles_get_all);
+router.get("/:id", articles_get_by_id);
+router.post("/", articles_create);
+router.delete("/:id", articles_delete);
+router.put("/:id", articles_update);
 
-// Get Specific article
-
-router.get("/:id", async (req, res) => {
-  try {
-    const article = await Article.findById(req.params.id);
-    res.json(article);
-  } catch (err) {
-    res.json({ message: err });
-  }
-});
-
-// Post article
-router.post("/", async (req, res) => {
-  const post = new Article({
-    title: req.body.title,
-    author: req.body.author,
-    content: req.body.content,
-  });
-
-  try {
-    const savedPost = await post.save();
-    res.json(savedPost);
-  } catch (err) {
-    res.json({ message: err });
-  }
-});
-
-//Delete
-router.delete("/:id", async (req, res) => {
-  const removeArticle = await Article.remove({ _id: req.params.id });
-  res.json(removeArticle);
-});
-
-//Update
-router.patch("/:id", async (req, res) => {
-  const updateArticle = await Article.updateOne(
-    { _id: req.params.id },
-    { $set: { title: req.body.title } }
-  );
-  res.json(updateArticle);
-});
+module.exports = router;
